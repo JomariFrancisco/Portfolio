@@ -9,13 +9,17 @@ const MilkyWayHero = () => {
   const actualText =
     "A determined developer crafting digital experiences—slow and steady, but always built to last!";
 
-  const scrambleText = (text) => {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    return text
-      .split("")
-      .map((char) => (char === " " ? " " : characters[Math.floor(Math.random() * characters.length)]))
-      .join("");
-  };
+    const scrambleText = (text) => {
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      return text
+        .split("")
+        .map((char) =>
+          /[a-zA-Z]/.test(char) // Only scramble letters
+            ? characters[Math.floor(Math.random() * characters.length)]
+            : char
+        )
+        .join("");
+    };// end of scrambleText function
 
   useEffect(() => {
     let interval = setInterval(() => setScrambledText(scrambleText(actualText)), 100);
