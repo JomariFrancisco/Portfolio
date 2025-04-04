@@ -1,57 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 const MilkyWayHero = () => {
-  const [scrambledText, setScrambledText] = useState('');
-  const actualText = "A determined developer crafting digital experiences—slow and steady, but always built to last!";
+  const [scrambledText, setScrambledText] = useState("");
+  const actualText =
+    "A determined developer crafting digital experiences—slow and steady, but always built to last!";
 
-  // Function to scramble text
   const scrambleText = (text) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     return text
-      .split('')
-      .map((char) => (char === ' ' ? ' ' : characters[Math.floor(Math.random() * characters.length)]))
-      .join('');
+      .split("")
+      .map((char) => (char === " " ? " " : characters[Math.floor(Math.random() * characters.length)]))
+      .join("");
   };
 
   useEffect(() => {
-    let interval;
-
-    // Start scrambling animation
-    interval = setInterval(() => {
-      setScrambledText(scrambleText(actualText));
-    }, 100); // Adjust speed here (lower = faster)
-
-    // Stop scrambling and reveal actual text after 2 seconds
+    let interval = setInterval(() => setScrambledText(scrambleText(actualText)), 100);
     setTimeout(() => {
       clearInterval(interval);
       setScrambledText(actualText);
-    }, 2000); // Adjust delay here
-
-    // Cleanup interval on unmount
+    }, 2000);
     return () => clearInterval(interval);
-  }, [actualText]);
+  }, []);
+
+  // Parallax effect for stars
+  useEffect(() => {
+    const handleScroll = () => {
+      let scrollValue = window.scrollY;
+      document.querySelector(".stars-layer-1").style.transform = `translateY(${scrollValue * 0.3}px)`;
+      document.querySelector(".stars-layer-2").style.transform = `translateY(${scrollValue * 0.5}px)`;
+      document.querySelector(".stars-layer-3").style.transform = `translateY(${scrollValue * 0.7}px)`;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Floating & draggable planets with orbit effect
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const planets = document.querySelectorAll(".planet");
+
+    planets.forEach((planet, index) => {
+      let angle = Math.random() * 360; // Random starting position
+      const orbitRadius = parseInt(getComputedStyle(planet).getPropertyValue("--orbit-radius")) || (index + 1) * 50;
+
+      function updatePosition() {
+        angle += 0.5; // Adjust speed of rotation
+        const radian = (angle * Math.PI) / 180;
+
+        // Get center of viewport
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        // Calculate new position
+        const x = centerX + orbitRadius * Math.cos(radian) - planet.clientWidth / 2;
+        const y = centerY + orbitRadius * Math.sin(radian) - planet.clientHeight / 2;
+
+        planet.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(updatePosition);
+      }
+
+      updatePosition();
+
+      const handleMouseDown = (e) => {
+        isDragging = true;
+        offsetX = e.clientX - planet.getBoundingClientRect().left;
+        offsetY = e.clientY - planet.getBoundingClientRect().top;
+        planet.style.position = "absolute";
+        planet.style.cursor = "grabbing";
+        planet.style.animation = "none";
+      };
+
+      const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        planet.style.left = `${e.clientX - offsetX}px`;
+        planet.style.top = `${e.clientY - offsetY}px`;
+      };
+
+      const handleMouseUp = () => {
+        isDragging = false;
+        planet.style.cursor = "grab";
+        planet.style.animation = `float ${2 + Math.random() * 3}s infinite ease-in-out alternate, 
+                                  rotate ${10 + Math.random() * 5}s linear infinite`;
+      };
+
+      planet.addEventListener("mousedown", handleMouseDown);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+
+      return () => {
+        planet.removeEventListener("mousedown", handleMouseDown);
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    });
+  }, []);
+
+  // Comet trail effect
+  useEffect(() => {
+    const createComet = (x, y) => {
+      const comet = document.createElement("div");
+      comet.className = "comet";
+      document.body.appendChild(comet);
+      comet.style.left = `${x}px`;
+      comet.style.top = `${y}px`;
+      setTimeout(() => comet.remove(), 500);
+    };
+
+    const handleMouseMove = (e) => createComet(e.clientX, e.clientY);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+  
 
   return (
     <div className="hero" id="hero">
       <div className="stars"></div>
       <div className="milkyway"></div>
       <div className="shooting-stars">
-        {/* Shooting stars with trails */}
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
+        <div className="parallax-container">
+          <div className="stars stars-layer-1"></div>
+          <div className="stars stars-layer-2"></div>
+          <div className="stars stars-layer-3"></div>
+        </div>
       </div>
-      
+
+      {[
+        "mercury",
+        "venus",
+        "earth",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+      ].map((planet, index) => (
+        <div key={index} className={`planet ${planet}`} style={{ "--orbit-radius": `${(index + 1) * 100}px` }}></div>
+      ))}
+
       <div className="content">
         <h1>Hi! I'm Jomari Z. Francisco</h1>
         <p>{scrambledText}</p>
@@ -60,30 +150,29 @@ const MilkyWayHero = () => {
   );
 };
 
-const Header = () => {
-  return (
-    <header className="header">
-      <nav>
-        <ul className="nav-list">
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#call-to-action">Contacts</a></li>
-        </ul>
-      </nav>
-    </header>
-  );
-};
+const Header = () => (
+  <header className="header">
+    <nav>
+      <ul className="nav-list">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#call-to-action">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+);
 
 const AboutSection = () => {
   return (
     <section id="about" className="about-section">
       <div className="container">
-        <h2>About Me</h2>
-        <p>
-          Hello! I'm Jomari Z. Francisco, a student at Western Mindanao State University with a passion for designing intuitive user experiences, working with hardware components, and analyzing systems for optimal performance. I enjoy creating innovative and functional solutions that bridge technology and usability.
-        </p>
-
+      <div className="section-container">
+      <h2 style={{ display: "flex", alignSelf: "center", justifyContent: "center" }}>About Me</h2>
+      <p>
+            Hello! I'm Jomari Z. Francisco, a student at Western Mindanao State University with a passion for designing intuitive user experiences, working with hardware components, and analyzing systems for optimal performance. I enjoy creating innovative and functional solutions that bridge technology and usability.
+          </p>
+        </div>
         {/* Career Goals Section with Container */}
         <div className="section-container">
           <div className="career-goals">
@@ -106,8 +195,8 @@ const AboutSection = () => {
 
         {/* Skills Section with Hover Effect */}
         <div className="skills">
-          <h3>Technical Skills</h3>
-          <ul>
+          <h3 style={{ marginBottom: "1rem", marginLeft: "1rem", fontSize: "1.8rem" }}>Technical Skills</h3>
+          <ul className="skills-grid">
             <li>React</li>
             <li>Next.js</li>
             <li>Node.js</li>
@@ -119,7 +208,8 @@ const AboutSection = () => {
 
         {/* Skills I Excel In Section */}
         <div className="skills-expertise">
-          <h3>Skills I Excel In</h3>
+        <h3 style={{ display: "flex", alignSelf: "center", justifyContent: "center" }}>Skills I Excel In</h3>
+
           <div className="skill-item">
             <h4>UX/UI Design</h4>
             <p>
@@ -169,6 +259,8 @@ const CallToAction = () => {
     </section>
   );
 };
+
+
 
 const App = () => {
   return (
