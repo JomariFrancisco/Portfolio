@@ -15,10 +15,13 @@ import {
   faFilter,
   faExternalLinkAlt,
   faChevronUp,
-  faChevronLeft,
-  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import profile from "./assets/Jomari Z. Francisco.jpg"
+
+// Import the images at the top of the file
+import portfolioImage from "./assets/Portfolio.jpg"
+import calculatorImage from "./assets/Calculator.jpg"
+import pokemonImage from "./assets/Pokemon.jpg"
 
 // Update the Header component to ensure proper mobile functionality
 const Header = () => {
@@ -176,7 +179,12 @@ const Hero = () => {
             </div>
 
             <div className={`hero-social ${isVisible ? "fade-in-delay-9" : ""}`}>
-              <a href="https://github.com/JomariFrancisco" target="_blank" rel="noopener noreferrer" className="social-button">
+              <a
+                href="https://github.com/JomariFrancisco"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-button"
+              >
                 <FontAwesomeIcon icon={faGithub} />
                 <span className="sr-only">GitHub</span>
               </a>
@@ -204,12 +212,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="scroll-indicator">
-        <div className="mouse">
-          <div className="wheel"></div>
-        </div>
-        <div className="scroll-text">Scroll Down</div>
-      </div>
+     
     </section>
   )
 }
@@ -264,26 +267,22 @@ const AboutSection = () => {
       year: "2021 - Present",
       title: "Information Technology Student",
       organization: "Western Mindanao State University",
-      
     },
     {
       year: "2019 - 2021",
       title: "Humanities and Social Science Student",
       organization: "Saint Joseph School Foundation Incorporated",
-      
     },
     {
       year: "2015 - 2019",
       title: "High School ",
       organization: "Zamboanga National Highschool West",
-      
     },
 
     {
       year: "2009 - 2015",
       title: "Elementary",
       organization: "Southcom Elementary School",
-      
     },
   ]
 
@@ -639,46 +638,38 @@ const CertificatesSection = () => {
         </div>
 
         {/* Mobile Carousel View */}
-{filteredCertificates.length > 0 && (
-  <div className="certificates-carousel-container mobile-only">
-    <div
-      className="certificates-carousel"
-      ref={carouselRef}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      style={{
-        transform: `translateX(-${currentSlide * 100}%) ${
-          isSwiping ? `translateX(${swipeDistance}px)` : ""
-        }`,
-      }}
-    >
-      {filteredCertificates.map((cert, index) => (
-        <div
-          className="certificate-slide"
-          key={index}
-        >
-          <div className="certificate-card" data-category={cert.category}>
-            <div className="certificate-content">
-              <h4>{cert.title}</h4>
-              <p>
-                Issued by {cert.issuer} | {cert.year}
-              </p>
-              <span className="certificate-category">{cert.category}</span>
+        {filteredCertificates.length > 0 && (
+          <div className="certificates-carousel-container mobile-only">
+            <div
+              className="certificates-carousel"
+              ref={carouselRef}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                transform: `translateX(-${currentSlide * 100}%) ${isSwiping ? `translateX(${swipeDistance}px)` : ""}`,
+              }}
+            >
+              {filteredCertificates.map((cert, index) => (
+                <div className="certificate-slide" key={index}>
+                  <div className="certificate-card" data-category={cert.category}>
+                    <div className="certificate-content">
+                      <h4>{cert.title}</h4>
+                      <p>
+                        Issued by {cert.issuer} | {cert.year}
+                      </p>
+                      <span className="certificate-category">{cert.category}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      ))}
-    </div>
+        )}
 
-    
-  </div>
-)}
-
-{filteredCertificates.length === 0 && (
-  <div className="no-results mobile-only">No certificates found matching your search.</div>
-)}
-
+        {filteredCertificates.length === 0 && (
+          <div className="no-results mobile-only">No certificates found matching your search.</div>
+        )}
       </div>
     </AnimatedSection>
   )
@@ -688,48 +679,28 @@ const CertificatesSection = () => {
 const ProjectsSection = () => {
   const [activeFilter, setActiveFilter] = useState("All")
 
+  // Then in the ProjectsSection component:
   const projects = [
     {
-      title: "Portfolio Website",
-      description: "A personal portfolio website built with React and modern CSS.",
-      category: "Web Development",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
+      title: "Personal Portfolio",
+      description: "A modern, responsive portfolio website built with React and CSS animations.",
+      category: "Portfolio",
+      image: portfolioImage,
+      link: "https://jomarifrancisco.netlify.app/",
     },
     {
-      title: "Weather App",
-      description: "A weather application that shows current weather and forecasts.",
-      category: "Web Development",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
+      title: "Scientific Calculator",
+      description: "Real-time weather application with forecast data and location search.",
+      category: "Calculator",
+      image: calculatorImage,
+      link: "https://scical-dumalagan-francisco.netlify.app/",
     },
     {
-      title: "E-commerce Platform",
-      description: "A full-featured e-commerce platform with product management.",
-      category: "Full Stack",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
-    },
-    {
-      title: "Task Management System",
-      description: "A task management application with user authentication.",
-      category: "Full Stack",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
-    },
-    {
-      title: "Mobile Banking UI",
-      description: "UI/UX design for a mobile banking application.",
-      category: "UI/UX Design",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
-    },
-    {
-      title: "Smart Home Dashboard",
-      description: "Dashboard for controlling smart home devices.",
-      category: "IoT",
-      image: "/placeholder.svg?height=300&width=500",
-      link: "#",
+      title: "Pokemon",
+      description: "A full-stack task management application with user authentication and data persistence.",
+      category: "Pokemon",
+      image: pokemonImage,
+      link: "https://pokebattlex.netlify.app/",
     },
   ]
 
@@ -769,14 +740,16 @@ const ProjectsSection = () => {
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, index) => (
               <div className="project-card" key={index} data-aos="fade-up" data-aos-delay={index * 100}>
-                <div className="project-image">
-                  <img src={project.image || "/placeholder.svg"} alt={project.title} />
-                  <div className="project-overlay">
-                    <a href={project.link} className="project-link" target="_blank" rel="noopener noreferrer">
-                      <FontAwesomeIcon icon={faExternalLinkAlt} />
-                    </a>
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-image-link">
+                  <div className="project-image">
+                    <img src={project.image || "/placeholder.svg"} alt={project.title} />
+                    <div className="project-overlay">
+                      <div className="project-link">
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </a>
                 <div className="project-content">
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
@@ -850,7 +823,7 @@ const CallToAction = () => {
           <h3>Connect With Me</h3>
           <div className="social-icons">
             <a
-              href="https://www.facebook.com/francisco.jz/"
+              href="https://www.facebook.com/frncsco.jz"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link"
@@ -873,7 +846,12 @@ const CallToAction = () => {
             >
               <FontAwesomeIcon icon={faLinkedin} className="social-icon" />
             </a>
-            <a href="https://github.com/JomariFrancisco" target="_blank" rel="noopener noreferrer" className="social-icon-link">
+            <a
+              href="https://github.com/JomariFrancisco"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon-link"
+            >
               <FontAwesomeIcon icon={faGithub} className="social-icon" />
             </a>
           </div>
@@ -906,7 +884,7 @@ const Footer = () => {
           <div className="footer-social">
             <h4>Connect</h4>
             <div className="footer-social-icons">
-              <a href="https://www.facebook.com/francisco.jz/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.facebook.com/frncsco.jz/" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faFacebook} />
               </a>
               <a href="https://instagram.com/frncsc.jz" target="_blank" rel="noopener noreferrer">
