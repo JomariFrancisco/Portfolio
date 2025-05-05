@@ -690,18 +690,19 @@ const ProjectsSection = () => {
     },
     {
       title: "Scientific Calculator",
-      description: "Real-time weather application with forecast data and location search.",
+      description: "A web-based scientific calculator with advanced mathematical functions, designed for quick and accurate computations.",
       category: "Calculator",
       image: calculatorImage,
       link: "https://scical-dumalagan-francisco.netlify.app/",
     },
     {
       title: "Pokemon",
-      description: "A full-stack task management application with user authentication and data persistence.",
+      description: "A Pokémon battle simulator web app that allows users to select teams, engage in battles, and track battle history for an interactive experience.",
       category: "Pokemon",
       image: pokemonImage,
       link: "https://pokebattlex.netlify.app/",
     },
+    
   ]
 
   // Get unique categories for filter
